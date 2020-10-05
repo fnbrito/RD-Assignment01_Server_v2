@@ -3,6 +3,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 // State object for reading client data asynchronously  
 public class StateObject
@@ -114,13 +117,21 @@ public class AsynchronousSocketListener
             string[] commands = new string[4];
             commands = content.Split(' ');
 
+            string filePath = @"C:\Users\Acer\Desktop\data.txt";
+            List<string> lines1 = new List<string>();
+            lines1 = File.ReadAllLines(filePath).ToList();
             if (commands[0].Length > 0)
             {
 
                 switch (commands[0].ToLower())
                 {
                     case "insert":
-                        Console.WriteLine("Trying to insert.");
+                        
+                        lines1 = File.ReadAllLines(filePath).ToList();
+                        lines1.Add( commands[1] + " " + commands[2] + " " + commands[3]);
+                        File.WriteAllLines(filePath,lines1);
+
+                        Console.WriteLine("Trying to insert. {0}");
                         content = "INSERTED";
                         break;
                     case "update":
